@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sahyadri Store — electronics, office supplies, furniture, kitchen, personal care, tools, packaging and fitness gear, delivered across India." />
+    <meta name="theme-color" content="#5f45ec" />
+    <title>Sahyadri Store · Everything for work and home</title>
+    <script>
+      // Apply the saved theme before the first paint so the page never flashes the wrong colours.
+      (function () {
+        try {
+          var saved = JSON.parse(localStorage.getItem('store.theme') || '"light"');
+          var dark = saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (error) {
+          /* storage unavailable: stay on the light theme */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

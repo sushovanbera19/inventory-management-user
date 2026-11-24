@@ -1,0 +1,588 @@
+/* ==========================================================================
+   Inventra design system — tokens, base styles and shared utilities.
+
+   Tailwind CSS v4: everything declared in @theme becomes a utility class
+   (bg-surface, text-fg-muted, border-line, bg-brand-600, shadow-card ...).
+   The light / dark VALUES live in :root and .dark further down, so components
+   use semantic classes and never need a "dark:" variant for colour.
+   ========================================================================== */
+@import "tailwindcss";
+
+/* Dark mode is driven by a "dark" class on <html> (see ThemeProvider). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Static tokens ------------------------------------------------ */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Plus Jakarta Sans Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  /* Brand scale: "iris" (indigo-violet) */
+  --color-brand-50: #f0f1ff;
+  --color-brand-100: #e3e5ff;
+  --color-brand-200: #cbceff;
+  --color-brand-300: #aaaaff;
+  --color-brand-400: #8a85fc;
+  --color-brand-500: #7063f7;
+  --color-brand-600: #5f45ec;
+  --color-brand-700: #5035d1;
+  --color-brand-800: #422ea9;
+  --color-brand-900: #382c85;
+  --color-brand-950: #221a4e;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --shadow-glow: 0 10px 28px -8px rgb(112 99 247 / 0.55);
+  --shadow-glow-sm: 0 6px 16px -6px rgb(112 99 247 / 0.5);
+
+  --animate-shimmer: shimmer 1.8s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 1.8s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+  --animate-aurora: aurora 18s ease-in-out infinite alternate;
+  --animate-aurora-reverse: aurora 24s ease-in-out infinite alternate-reverse;
+  --animate-gradient-x: gradient-x 6s ease infinite;
+  --animate-indeterminate: indeterminate 1.3s ease-in-out infinite;
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+}
+
+/* ---------- Theme-aware tokens (values swap with .dark) ------------------- */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-overlay: var(--overlay);
+
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-fg: var(--brand-fg);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-fg: var(--success-fg);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-fg: var(--warning-fg);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-fg: var(--danger-fg);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-info-fg: var(--info-fg);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+
+  --shadow-card: var(--card-shadow);
+  --shadow-raised: var(--raised-shadow);
+  --shadow-pop: var(--pop-shadow);
+}
+
+/* Light theme (default). ".force-light" pins a subtree to light, e.g. the printable invoice. */
+:root,
+.force-light {
+  color-scheme: light;
+
+  --bg: #f5f6fb;
+  --surface: #ffffff;
+  --surface-2: #f3f4fa;
+  --surface-3: #e9ebf5;
+  --line: #e5e7f1;
+  --line-strong: #cfd3e2;
+  --fg: #101327;
+  --fg-muted: #565c75;
+  --fg-subtle: #878da6;
+  --overlay: rgb(16 19 39 / 0.5);
+
+  --brand-soft: #eeefff;
+  --brand-fg: #5035d1;
+
+  --success: #0fa968;
+  --success-soft: #e3f8ee;
+  --success-fg: #0a7a4b;
+  --warning: #f59e0b;
+  --warning-soft: #fff3d9;
+  --warning-fg: #a15c07;
+  --danger: #ef4461;
+  --danger-soft: #ffe8ec;
+  --danger-fg: #c0233f;
+  --info: #0ea5e9;
+  --info-soft: #e1f3fd;
+  --info-fg: #0b6fa4;
+
+  --chart-1: #7063f7;
+  --chart-2: #22b8cf;
+  --chart-3: #f59e0b;
+  --chart-4: #ec5f9a;
+  --chart-5: #10b981;
+  --chart-6: #f97316;
+  --chart-7: #3b82f6;
+  --chart-8: #94a3b8;
+  --chart-grid: #e8eaf3;
+  --chart-axis: #878da6;
+
+  --card-shadow: 0 1px 2px rgb(22 28 60 / 0.04), 0 2px 8px -2px rgb(22 28 60 / 0.06);
+  --raised-shadow: 0 2px 4px rgb(22 28 60 / 0.04), 0 12px 28px -10px rgb(22 28 60 / 0.16);
+  --pop-shadow: 0 18px 44px -12px rgb(22 28 60 / 0.24), 0 6px 14px -6px rgb(22 28 60 / 0.1);
+}
+
+/* Dark theme. ".force-dark" pins a subtree to dark, e.g. the sign-in brand panel. */
+.dark,
+.force-dark {
+  color-scheme: dark;
+
+  --bg: #090b13;
+  --surface: #10131e;
+  --surface-2: #161a28;
+  --surface-3: #1e2334;
+  --line: #222739;
+  --line-strong: #323954;
+  --fg: #eef0fa;
+  --fg-muted: #a3a9c2;
+  --fg-subtle: #6d748e;
+  --overlay: rgb(3 4 10 / 0.72);
+
+  --brand-soft: rgb(112 99 247 / 0.16);
+  --brand-fg: #b6b3ff;
+
+  --success: #34d399;
+  --success-soft: rgb(52 211 153 / 0.13);
+  --success-fg: #6ee7b7;
+  --warning: #fbbf24;
+  --warning-soft: rgb(251 191 36 / 0.13);
+  --warning-fg: #fcd34d;
+  --danger: #fb7185;
+  --danger-soft: rgb(251 113 133 / 0.14);
+  --danger-fg: #fda4af;
+  --info: #38bdf8;
+  --info-soft: rgb(56 189 248 / 0.13);
+  --info-fg: #7dd3fc;
+
+  --chart-1: #8a85fc;
+  --chart-2: #22d3ee;
+  --chart-3: #fbbf24;
+  --chart-4: #f472b6;
+  --chart-5: #34d399;
+  --chart-6: #fb923c;
+  --chart-7: #60a5fa;
+  --chart-8: #64748b;
+  --chart-grid: #1f2436;
+  --chart-axis: #6d748e;
+
+  --card-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  --raised-shadow: 0 14px 30px -12px rgb(0 0 0 / 0.65);
+  --pop-shadow: 0 24px 56px -14px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+/* ---------- Base --------------------------------------------------------- */
+@layer base {
+  *,
+  ::before,
+  ::after,
+  ::backdrop {
+    border-color: var(--line);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--bg);
+    color: var(--fg);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  /* Tailwind v4 no longer gives buttons a pointer cursor. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary,
+  label[for],
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-brand-500) 28%, transparent);
+  }
+
+  /* Number inputs without the browser spin buttons. */
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='search']::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  /* Slim, theme-aware scrollbars. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--line-strong);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ---------- Utilities ---------------------------------------------------- */
+
+/* Brand gradient fill (primary buttons, logo tile, highlights). */
+@utility bg-gradient-brand {
+  background-image: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-brand-600) 48%, #8f3ff0 100%);
+}
+
+/* Gradient text for hero numbers and headings. */
+@utility text-gradient-brand {
+  background-image: linear-gradient(120deg, var(--color-brand-500) 0%, #a855f7 55%, #ec4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Frosted surface (sticky top bar, floating panels). */
+@utility glass {
+  background-color: color-mix(in oklab, var(--surface) 76%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+}
+
+/* Soft brand glows behind the page content. */
+@utility app-backdrop {
+  background-image:
+    radial-gradient(60rem 28rem at 88% -8%, color-mix(in oklab, var(--color-brand-500) 13%, transparent), transparent 62%),
+    radial-gradient(42rem 24rem at -6% 2%, color-mix(in oklab, #22d3ee 8%, transparent), transparent 58%);
+  background-repeat: no-repeat;
+}
+
+/* Dotted grid texture. */
+@utility bg-dot-grid {
+  background-image: radial-gradient(circle at 1px 1px, var(--line-strong) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+/* Loading placeholder with a moving sheen. */
+@utility skeleton {
+  border-radius: 0.5rem;
+  background-color: var(--surface-3);
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    color-mix(in oklab, var(--surface) 75%, transparent) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------- Keyframes ---------------------------------------------------- */
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  80%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes aurora {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(6%, -8%, 0) scale(1.15) rotate(12deg);
+  }
+  100% {
+    transform: translate3d(-8%, 6%, 0) scale(0.95) rotate(-10deg);
+  }
+}
+
+@keyframes gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%) scaleX(0.4);
+  }
+  50% {
+    transform: translateX(20%) scaleX(0.7);
+  }
+  100% {
+    transform: translateX(120%) scaleX(0.4);
+  }
+}
+
+/* ---------- Shop effects ------------------------------------------------- */
+
+/* Infinite horizontal scrolling strip (Marquee component). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* A light sweep that crosses a button or card. */
+@keyframes shine {
+  from {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(220%) skewX(-20deg);
+  }
+}
+
+@keyframes border-spin {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    border-radius: 70% 30% 46% 54% / 30% 39% 61% 70%;
+    transform: translate(4%, -6%) rotate(20deg);
+  }
+}
+
+@keyframes cart-bump {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.35) rotate(-8deg);
+  }
+  60% {
+    transform: scale(0.92) rotate(6deg);
+  }
+}
+
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Rotating gradient border. Put it on an element with a background and rounded corners. */
+@utility border-animated {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    conic-gradient(from var(--border-angle), #7063f7, #ec4899, #f59e0b, #22d3ee, #7063f7) border-box;
+  animation: border-spin 5s linear infinite;
+}
+
+/* A shine that sweeps across on hover. Needs `relative overflow-hidden` and `group` on the element. */
+@utility shine-on-hover {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent);
+    transform: translateX(-120%) skewX(-20deg);
+    pointer-events: none;
+  }
+  &:hover::after {
+    animation: shine 0.9s ease;
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee var(--marquee-duration, 30s) linear infinite;
+}
+
+@utility animate-blob {
+  animation: blob 14s ease-in-out infinite;
+}
+
+@utility animate-cart-bump {
+  animation: cart-bump 0.6s ease;
+}
+
+/* Underline that grows from the left on hover. */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  &:hover {
+    background-size: 100% 2px;
+  }
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+@keyframes toast-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(12deg);
+  }
+}
+
+/* ---------- Theme switch (View Transitions API) --------------------------
+   ThemeProvider reveals the new theme with a growing circle from the toggle.
+   The default cross-fade is switched off so only that circle animates. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* ---------- Accessibility & print ---------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+}
